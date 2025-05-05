@@ -61,5 +61,5 @@ def create_embeddings(md_file_loc):
 
 
 if __name__ == "__main__":
-    file_loc = "test_chunks/sample.md"
+    file_loc = "output/sample_final.md"
     create_embeddings(file_loc)
