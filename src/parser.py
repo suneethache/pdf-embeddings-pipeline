@@ -16,12 +16,12 @@ from magic_pdf.config.enums import SupportedPdfParseMethod
 import sys
 # args
 __dir__ = os.path.dirname(os.path.abspath(__file__))
-pdf_file_name = os.path.join(__dir__, "pdfs", "sample_document.pdf") 
+pdf_file_name = os.path.join(__dir__, "samples/Attention_arxiv.pdf") 
 name_without_extension = os.path.basename(pdf_file_name).split('.')[0]
 
 # prepare env
-local_image_dir = os.path.join(__dir__, "output", name_without_extension, "images")
-local_md_dir = os.path.join(__dir__, "output", name_without_extension)
+local_image_dir = os.path.join(__dir__, "outputs", name_without_extension, "images")
+local_md_dir = os.path.join(__dir__, "outputs", name_without_extension)
 image_dir = str(os.path.basename(local_image_dir))
 os.makedirs(local_image_dir, exist_ok=True)
 
