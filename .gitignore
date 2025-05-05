@@ -1,3 +1,4 @@
 .env
 .src/output/Entgelte_2025_final
 ./test_chunks
+./src/output/Entgelte_2025_final/images
