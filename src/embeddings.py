@@ -1,65 +1,49 @@
 """
-    Input: .md file
-    process: clean .md file, create chunks, embed chunks, store in vector database
+Input: .md file
+Process: Clean .md file, create chunks, embed chunks, store in vector database
 """
-from langchain.text_splitter import  SentenceTransformersTokenTextSplitter
-from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
+from typing import List
 import re
+import numpy as np
+import faiss
+from sentence_transformers import SentenceTransformer
+from langchain.text_splitter import SentenceTransformersTokenTextSplitter
 
-def clean_content(content):
-    
-    # Remove headings (##, ###, etc.)
+def clean_content(content: str) -> str:
+    """Cleans markdown content by removing headers, extra spaces, and newlines."""
     content = re.sub(r"#+\s", "", content)
-    # Remove extra whitespace
     content = re.sub(r"\n{2,}", "\n\n", content)
-    # Remove extra spaces after sentence-ending punctuation
     content = re.sub(r"([.!?]) {2,}", r"\1 ", content)
-
-    # Remove multiple newlines
-    content = re.sub(r"\n{2,}", "\n\n", content)
-
-    # Optional: strip leading/trailing spaces from each line
     content = "\n".join(line.strip() for line in content.splitlines())
-
     return content.strip()
 
-def create_embeddings(md_file_loc):
+def create_embeddings(md_file_loc: str) -> faiss.IndexFlatL2:
+    """Reads a markdown file, cleans it, creates embeddings, and saves to FAISS index."""
+    with open(md_file_loc, 'r', encoding='utf-8') as file:
+        raw_content = file.read()
+        print(f"Raw content length: {len(raw_content)}")
 
-    # read the mark down file
-    with open(md_file_loc, 'r') as f:
-        raw_content = f.read()
-        #print(raw_content)
-        print(len(raw_content))
-
-    # preprocess, cleaning
     content = clean_content(raw_content)
 
-    # chunk the data
     splitter = SentenceTransformersTokenTextSplitter(
         model_name="all-MiniLM-L6-v2",
         chunk_size=100,
         chunk_overlap=20
-        )
-    
+    )
     chunks = splitter.split_text(content)
 
-    # Embeddings for each chunk data
-    embedding_model = SentenceTransformer("intfloat/multilingual-e5-base") # best model for multilanguage content
+    embedding_model = SentenceTransformer("intfloat/multilingual-e5-base")
     embeddings = embedding_model.encode(chunks, show_progress_bar=True)
 
-    # Save the embeddings  in to a vector database
     dim = len(embeddings[0])
     index = faiss.IndexFlatL2(dim)
     index.add(np.array(embeddings).astype('float32'))
 
     print("Data added to the vector DB")
-    print(index.ntotal)
+    print(f"Number of vectors: {index.ntotal}")
 
     return index
 
-
 if __name__ == "__main__":
-    file_loc = "output/sample_final.md"
-    create_embeddings(file_loc)
+    FILE_LOC: str = "output/sample_final.md"
+    create_embeddings(FILE_LOC)
