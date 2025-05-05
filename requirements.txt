@@ -1,0 +1,8 @@
+magic-pdf[full]
+numpy==2.2.5
+langchain
+openai
+tiktoken
+sentence_transformers
+faiss-cpu
+#markdown
