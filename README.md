@@ -13,12 +13,14 @@ converts it to Markdown, and generates sentence-level embeddings for semantic se
 
 ## Folder Structure
 ```
-├── embeddings.py # Embeds markdown content and stores in FAISS
-├── parser.py # Parses PDF and generates markdown using MinerU
-├── setup.sh # Shell script to install dependencies and download models
-├── outputs/ # Output folder for markdown and images
-├── samples/ # Folder to place sample PDFs
-└── requirements.txt # Python dependencies
+root
+├── src
+     ├── embeddings.py # Embeds markdown content and stores in FAISS
+     ├── parser.py # Parses PDF and generates markdown using MinerU
+     ├── setup.sh # Shell script to install dependencies and download models
+     ├── outputs/ # Output folder for markdown and images
+     ├── samples/ # Folder to place sample PDFs
+├── requirements.txt # Python dependencies
 ```
 
 ## Setup Instructions
